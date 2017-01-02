@@ -1,0 +1,9 @@
+---
+###########################
+# Intstall kubectl
+###########################
+
+- hosts: localhost
+  connection: local
+  roles:
+    - kubectl-install

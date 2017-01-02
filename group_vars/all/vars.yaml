@@ -1,0 +1,21 @@
+---
+
+cluster_name: dave-dev.dbg-devops.com
+state_store: s3://dave-dev-kops
+
+# Remote access
+ssh_public_key: ~/.ssh/id_rsa.pub
+
+# Regions
+aws_region: eu-west-1
+aws_zones: eu-west-1a,eu-west-1b,eu-west-1c
+
+# Network
+dns_zone: dbg-devops.com
+network_cidr: 172.35.0.0/16
+kubernetes_networking: calico
+
+# EC2 host sizing
+master_size: t2.small
+node_size: t2.small
+node_count: 6

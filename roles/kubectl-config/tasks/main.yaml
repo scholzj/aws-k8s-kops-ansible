@@ -1,0 +1,8 @@
+---
+
+####################
+# Configure kubectl using kops
+####################
+
+- name: Configure kubectl using kops
+  shell: "kops export kubecfg --name {{ cluster_name }} --state {{ state_store }}"

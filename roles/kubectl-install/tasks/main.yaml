@@ -1,0 +1,31 @@
+---
+
+#############
+# Install Kubectl
+#############
+
+- name: Download Kubectl binaries
+  get_url:
+    url: "{{ kubectl_darwin_download_path }}/{{ item }}"
+    dest: /usr/local/bin
+    owner: root
+    group: admin
+    mode: 0755
+    # TODO Add hash check
+  with_items:
+    - kubectl
+  when: ansible_os_family == 'Darwin'
+  become: true
+
+- name: Download Kubectl binaries
+  get_url:
+    url: "{{ kubectl_download_path }}/{{ item }}"
+    dest: /usr/local/bin
+    owner: root
+    group: root
+    mode: 0755
+    # TODO Add hash check
+  with_items:
+    - kubectl
+  when: ansible_os_family != 'Darwin'
+  become: true

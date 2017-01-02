@@ -1,0 +1,15 @@
+---
+
+####################
+# Install Kubernetes Dashboard
+####################
+
+- name: Add Kubernetes dashboard deployment configuration
+  template:
+    src: kubernetes-dashboard.yaml.j2
+    dest: /tmp/kubernetes-dashboard.yaml
+    mode: 644
+  become: false
+
+- name: Launch Kubernetes dashboard service
+  command: "kubectl create -f /tmp/kubernetes-dashboard.yaml"

@@ -1,0 +1,9 @@
+---
+###########################
+# Setup Kubernetes Cluster
+###########################
+
+- hosts: localhost
+  connection: local
+  roles:
+    - cluster
