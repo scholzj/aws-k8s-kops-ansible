@@ -8,7 +8,7 @@
   template:
     src: storage-class.yaml.j2
     dest: /tmp/storage-class.yaml
-    mode: 644
+    mode: 0644
   become: false
 
 - name: Load storage class into configuration

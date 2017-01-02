@@ -8,7 +8,7 @@
   template:
     src: heapster.yaml.j2
     dest: /tmp/heapster.yaml
-    mode: 644
+    mode: 0644
   become: false
 
 - name: Launch Heapster
