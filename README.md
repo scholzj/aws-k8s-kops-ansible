@@ -36,6 +36,10 @@ The main configuration of the cluster is in the variables in `group_vars/all/var
 | `node_size` | EC2 size of the nodes used as workers. | `t2.small` |
 | `node_count` | Nomber of EC2 worker hosts. | `6` |
 
+## Updating Kubernetes cluster
+
+The Kubernetes cluster setup is done using the Kops tool only. All updates to it can be done using Kops. The Ansible playbooks from this project only simplify the initial setup.
+
 ## Delete Kubernetes cluster
 
 To delete the cluster run
