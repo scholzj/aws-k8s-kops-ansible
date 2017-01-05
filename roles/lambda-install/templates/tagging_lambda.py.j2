@@ -12,12 +12,13 @@ log_handler.setFormatter(log_formatter)
 LOGGER.addHandler(log_handler)
 
 # Configuration
-region = "eu-west-1"
-cluster = "dave-dev.dbg-devops.com"
-tag_Application = "DAVe"
-tag_Confidentiality = "None"
-tag_CostCenter = "665050"
-tag_Owner = "schojak"
+region = "{{ aws_region}}"
+cluster = "{{ cluster_name }}"
+tag_Application = "{{ tag_application }}"
+tag_Confidentiality = "{{ tar_confidentiality }}"
+tag_CostCenter = "{{ tag_costcenter }}"
+tag_Owner = "{{ tag_owner }}"
+tag_Environment = "{{ tag_environment }}"
 
 # Tag the resources ...
 def lambda_handler(event, context):
@@ -175,6 +176,9 @@ def prepare_new_tags(tags):
 
     if find_tag(tags, "Owner") != tag_Owner:
         newTags.append({'Key': 'Owner', 'Value': tag_Owner})
+
+    if find_tag(tags, "Environment") != tag_Environment:
+        newTags.append({'Key': 'Environment', 'Value': tag_Environment})
 
     return newTags
 
