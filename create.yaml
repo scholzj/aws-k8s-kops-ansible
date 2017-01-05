@@ -6,4 +6,6 @@
 - hosts: localhost
   connection: local
   roles:
-    - cluster
+    - lambda-delete
+    - lambda-install
+    - create-cluster
