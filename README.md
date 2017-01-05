@@ -37,6 +37,23 @@ The main configuration of the cluster is in the variables in `group_vars/all/var
 | `node_size` | EC2 size of the nodes used as workers. | `t2.small` |
 | `node_count` | Nomber of EC2 worker hosts. | `6` |
 
+Additionally to the Kubernetes cluster it self, an AWS Lambda function will be created which will run periodically to tag all resources creating by Kops and by Kubernetes. It will use following tags:
+* Owner
+* Application
+* CostCenter
+* Confidentiality
+* Environment
+
+The tags are configured in also in `group_vars/all/vars.yaml` using following variables:
+
+| Option | Explanation | Example |
+|--------|-------------|---------|
+| `tag_owner` | Value for the Owner tag | `scholzj` |
+| `tag_application` | Value for the Application tag | `MyApp1` |
+| `tag_costcenter` | Value for the CostCenter tag | `123456` |
+| `tar_confidentiality` | Value for the Confidentiality tag | `StrictlyConfidential` |
+| `tag_environment` | Value for the Environment tag | `DEV` |
+
 ## Updating Kubernetes cluster
 
 The Kubernetes cluster setup is done using the Kops tool only. All updates to it can be done using Kops. The Ansible playbooks from this project only simplify the initial setup.
@@ -58,4 +75,16 @@ Currently, the supported add-ons are:
 To install the add-ons run
 ```
 ansible-playbook addons.yaml
+```
+
+## Install and deleting the tagging lambda function
+
+The AWS Lambda function for tagging of resources (the related IAM and CloudWatch objects) can be also installed and uninstalled separately. To install it run:
+```
+ansible-playbook install-lambda.yaml
+```
+
+To uninstall it run:
+```
+ansible-playbook uninstall-lambda.yaml
 ```
