@@ -1,0 +1,9 @@
+---
+###########################
+# Intstall tagging lambda
+###########################
+
+- hosts: localhost
+  connection: local
+  roles:
+    - lambda-install
