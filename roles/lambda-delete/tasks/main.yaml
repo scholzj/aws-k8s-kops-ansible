@@ -1,0 +1,46 @@
+---
+
+####################
+# Delete tagging lambda function
+####################
+
+#
+# Check if the IAM resources and Lambda exist and if yes, wipe them
+#
+
+- set_fact:
+    lambda_name: "{{ cluster_name | replace('.', '_') }}-tagging"
+
+- name: Delete target using AWS CLI
+  command: "aws events remove-targets --rule {{ lambda_name }} --ids 1 --region {{ aws_region }} --output json"
+  ignore_errors: true
+
+- name: Delete rule using AWS CLI
+  command: "aws events delete-rule --name {{ lambda_name }} --region {{ aws_region }} --output json"
+
+- name: Remove lambda permission to receive events using AWS CLI
+  command: "aws lambda remove-permission --function-name {{ lambda_name }} --statement-id {{ lambda_name }} --region {{ aws_region }} --output json"
+  ignore_errors: true
+
+- name: Check if the Lambda already exists
+  command: "aws lambda get-function --function-name {{ lambda_name }} --region {{ aws_region }} --output json"
+  register: get_lambda
+  ignore_errors: true
+
+- name: Delete the Lambda if it already exists
+  command: "aws lambda delete-function --function-name {{ lambda_name }} --region {{ aws_region }} --output json"
+  register: get_lambda
+  when: get_lambda.stdout.find('arn:aws:lambda:') != -1
+
+- name: Check if IAM role already exists using AWS CLI
+  command: "aws iam get-role --role-name {{ lambda_name }} --output json"
+  register: get_role
+  ignore_errors: true
+
+- name: Delete IAM role policy if it already exists using AWS CLI
+  command: "aws iam delete-role-policy --role-name {{ lambda_name }} --policy-name {{ lambda_name }} --output json"
+  when: get_role.stdout.find('arn:aws:iam::') != -1
+
+- name: Delete IAM role if it already exists using AWS CLI
+  command: "aws iam delete-role --role-name {{ lambda_name }} --output json"
+  when: get_role.stdout.find('arn:aws:iam::') != -1

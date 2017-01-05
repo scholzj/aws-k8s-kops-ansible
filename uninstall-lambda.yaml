@@ -7,4 +7,3 @@
   connection: local
   roles:
     - lambda-delete
-    - lambda-install

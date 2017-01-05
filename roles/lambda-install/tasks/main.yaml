@@ -33,38 +33,14 @@
   become: false
 
 #
-# Check if the IAM resources and Lambda exist and if yes, wipe them
-#
-
-- name: Check if the Lambda already exists
-  command: "aws lambda get-function --function-name {{ cluster_name | replace('.', '_')}}-tagging-lambda --region {{ aws_region }} --output json"
-  register: get_lambda
-  ignore_errors: true
-
-- name: Delete the Lambda if it already exists
-  command: "aws lambda delete-function --function-name {{ cluster_name | replace('.', '_')}}-tagging-lambda --region {{ aws_region }} --output json"
-  register: get_lambda
-  when: get_lambda.stdout.find('arn:aws:lambda:') != -1
-
-- name: Check if IAM role already exists using AWS CLI
-  command: "aws iam get-role --role-name {{ cluster_name | replace('.', '_') }}-tagging-lambda-role --output json"
-  register: get_role
-  ignore_errors: true
-
-- name: Delete IAM role policy if it already exists using AWS CLI
-  command: "aws iam delete-role-policy --role-name {{ cluster_name | replace('.', '_') }}-tagging-lambda-role --policy-name {{ cluster_name | replace('.', '_') }}-tagging-lambda-inline-policy --output json"
-  when: get_role.stdout.find('arn:aws:iam::') != -1
-
-- name: Delete IAM role if it already exists using AWS CLI
-  command: "aws iam delete-role --role-name {{ cluster_name | replace('.', '_') }}-tagging-lambda-role --output json"
-  when: get_role.stdout.find('arn:aws:iam::') != -1
-
-#
 # Create the resources
 #
 
+- set_fact:
+    lambda_name: "{{ cluster_name | replace('.', '_') }}-tagging"
+
 - name: Create IAM role using AWS CLI
-  command: "aws iam create-role --role-name {{ cluster_name | replace('.', '_') }}-tagging-lambda-role --assume-role-policy-document file:///tmp/trust-policy.json --output json"
+  command: "aws iam create-role --role-name {{ lambda_name }} --assume-role-policy-document file:///tmp/trust-policy.json --output json"
   register: iam_role
 
 - set_fact:
@@ -74,12 +50,16 @@
     role_arn: "{{ role['Role']['Arn'] }}"
 
 - name: Put inline policy into the role using AWS CLI
-  command: "aws iam put-role-policy --role-name {{ cluster_name | replace('.', '_') }}-tagging-lambda-role --policy-name {{ cluster_name | replace('.', '_') }}-tagging-lambda-inline-policy --policy-document file:///tmp/tagging-lambda-policy.json --output json"
+  command: "aws iam put-role-policy --role-name {{ lambda_name }} --policy-name {{ lambda_name }} --policy-document file:///tmp/tagging-lambda-policy.json --output json"
   register: role_policy
 
+# Sometimes, the role is not yet propagated accross all regions. Hence the loop.
 - name: Create the lambda using AWS CLI
-  command: "aws lambda create-function --function-name {{ cluster_name | replace('.', '_')}}-tagging-lambda --role {{ role_arn }} --handler tagging_lambda.lambda_handler --runtime python2.7 --timeout 60 --memory 128 --zip-file fileb:///tmp/tagging_lambda.zip --region {{ aws_region }} --output json"
+  command: "aws lambda create-function --function-name {{ lambda_name }} --role {{ role_arn }} --handler tagging_lambda.lambda_handler --runtime python2.7 --timeout 60 --memory 128 --zip-file fileb:///tmp/tagging_lambda.zip --region {{ aws_region }} --output json"
   register: create_lambda_result
+  until: create_lambda_result.stdout.find('FunctionArn') != -1
+  retries: 10
+  delay: 5
 
 - set_fact:
     create_lambda: "{{ create_lambda_result.stdout | from_json }}"
@@ -87,52 +67,27 @@
 - set_fact:
     lambda_arn: "{{ create_lambda['FunctionArn'] }}"
 
-- debug:
-    msg: "{{ create_lambda_result }}"
+- name: Create the scheduling rule using AWS CLI
+  command: "aws events put-rule --name {{ lambda_name }} --schedule-expression 'rate(5 minutes)' --region {{ aws_region }} --output json"
+  register: create_rule_result
 
-- debug:
-    msg: "{{ lambda_arn }}"
+- set_fact:
+    create_rule: "{{ create_rule_result.stdout | from_json }}"
 
-- name: Create the CloudWatch event scheduler
-  cloudwatchevent_rule:
-    name: "{{ cluster_name | replace('.', '_')}}-tagging-lambda-scheduler"
-    schedule_expression: "rate(5 minutes)"
-    description: "Trigger tagging of {{ cluster_name }} resources"
-    state: present
-    region: "{{ aws_region }}"
-    targets:
-      - id: "{{ cluster_name | replace('.', '_')}}-tagging-lambda-target"
-        arn: "{{ lambda_arn }}"
+- set_fact:
+    rule_arn: "{{ create_rule['RuleArn'] }}"
 
-# - name: Create IAM role for the tagging lambda
-#   iam:
-#     iam_type: role
-#     name: "{{ cluster_name | replace('.', '_') }}-tagging-lambda-role"
-#     state: present
-#     trust_policy:
-#       Version: '2012-10-17'
-#       Statement:
-#       - Action: sts:AssumeRole
-#         Effect: Allow
-#         Principal:
-#           Service: lambda.amazonaws.com
+- name: Give lambda permission to receive events using AWS CLI
+  command: "aws lambda add-permission --function-name {{ lambda_name }} --statement-id {{ lambda_name }} --action 'lambda:InvokeFunction' --principal events.amazonaws.com --source-arn {{ rule_arn }} --region {{ aws_region }} --output json"
+  register: add_permission_result
 
-# - name: Create a policy for the tagging lambda and assign it to the role
-#   iam_policy:
-#     iam_type: role
-#     iam_name: "{{ cluster_name | replace('.', '_')}}-tagging-lambda-role"
-#     policy_name: "{{ cluster_name | replace('.', '_')}}-tagging-lambda-policy"
-#     state: present
-#     policy_document: /tmp/tagging-lambda-policy.json
-#
-# - name: Create the lambda function
-#   lambda:
-#     name: "{{ cluster_name | replace('.', '_')}}-tagging-lambda"
-#     state: present
-#     region: "{{ aws_region }}"
-#     zip_file: /tmp/tagging_lambda.zip
-#     runtime: 'python2.7'
-#     timeout: 60
-#     memory_size: 128
-#     role: "role/{{ cluster_name | replace('.', '_')}}-tagging-lambda-role"
-#     handler: 'tagging_lambda.lambda_handler'
+- name: Generate Lambda target
+  template:
+    src: rule-targets.json.j2
+    dest: /tmp/rule-targets.json
+    mode: 0644
+  become: false
+
+- name: Put target to route events to lambda using AWS CLI
+  command: "aws events put-targets --rule {{ lambda_name }} --targets file:///tmp/rule-targets.json --region {{ aws_region }} --output json"
+  register: put_target_result
