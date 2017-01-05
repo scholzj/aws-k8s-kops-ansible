@@ -7,6 +7,7 @@ state_store: s3://dave-dev-kops
 ssh_public_key: ~/.ssh/id_rsa.pub
 
 # Regions / Availability zones
+aws_region: eu-west-1
 aws_zones: eu-west-1a,eu-west-1b,eu-west-1c
 
 # Network
