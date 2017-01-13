@@ -1,0 +1,27 @@
+---
+
+#############
+# Install Kops
+#############
+
+- name: Download Kops binaries
+  get_url:
+    url: "{{ kops_darwin_download_path }}"
+    dest: /usr/local/bin/kops
+    owner: root
+    group: admin
+    mode: 0755
+    # TODO Add hash check
+  when: ansible_os_family == 'Darwin'
+  become: true
+
+- name: Download Kops binaries
+  get_url:
+    url: "{{ kops_download_path }}"
+    dest: /usr/local/bin/kops
+    owner: root
+    group: root
+    mode: 0755
+    # TODO Add hash check
+  when: ansible_os_family != 'Darwin'
+  become: true

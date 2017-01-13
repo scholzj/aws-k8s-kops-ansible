@@ -14,6 +14,13 @@ Playbook `install-kubectl.yaml` can be used for installing the latest version of
 ansible-playbook install-kubectl.yaml
 ```
 
+### Kops installation
+
+Playbook `install-kops.yaml` can be used for installing the latest version of Kops utility on Linux or MacOS. To install it run
+```
+ansible-playbook install-kops.yaml
+```
+
 ## Install Kubernetes cluster
 
 The Kubernetes cluster can be created by running

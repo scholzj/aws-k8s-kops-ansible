@@ -1,0 +1,9 @@
+---
+###########################
+# Intstall Kops
+###########################
+
+- hosts: localhost
+  connection: local
+  roles:
+    - kops-install
