@@ -9,7 +9,7 @@
   register: get_clusters
 
 - name: Configure the cluster
-  shell: "kops create cluster --associate-public-ip=false --bastion=true --channel=stable --cloud=aws --dns-zone={{ dns_zone }} --master-size={{ master_size }} --master-zones={{ aws_zones }} --network-cidr={{ network_cidr }} --networking={{ kubernetes_networking }} --node-count={{ node_count }} --node-size={{ node_size }} --target=direct --topology=private --zones={{ aws_zones }} --ssh-public-key={{ ssh_public_key }} --name={{ cluster_name }} --state {{ state_store }}"
+  shell: "kops create cluster --associate-public-ip=false --bastion=true --channel=alpha --cloud=aws --dns-zone={{ dns_zone }} --master-size={{ master_size }} --master-zones={{ aws_zones }} --network-cidr={{ network_cidr }} --networking={{ kubernetes_networking }} --node-count={{ node_count }} --node-size={{ node_size }} --target=direct --topology=private --zones={{ aws_zones }} --ssh-public-key={{ ssh_public_key }} --name={{ cluster_name }} --state {{ state_store }}"
 
 - name: Create the physical cluster
   shell: "kops update cluster {{ cluster_name }} --yes --state {{ state_store }}"
