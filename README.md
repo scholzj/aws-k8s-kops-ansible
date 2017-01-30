@@ -5,7 +5,7 @@
 * Install Kops (https://github.com/kubernetes/kops) (see below)
 * Install Ansible
 * Install kubectl (see below)
-* Create secure Amazon S3 bucket, which the Kops tool will use as the storage for cluster configurations. **The bucket will contain also the access details for the clusters configured with Kops. Tt should be secured accordingly.**
+* Create secure Amazon S3 bucket, which the Kops tool will use as the storage for cluster configurations. **The bucket will contain also the access details for the clusters configured with Kops. It should be secured accordingly.**
 
 ### Kubectl installation
 
