@@ -1,0 +1,9 @@
+---
+###########################
+# Delete S3 bucket for state store
+###########################
+
+- hosts: localhost
+  connection: local
+  roles:
+    - delete-state-store

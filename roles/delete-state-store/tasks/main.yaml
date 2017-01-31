@@ -1,0 +1,20 @@
+---
+
+####################
+# Create the S3 bucket for the Kops state store
+####################
+
+# Create a simple s3 bucket
+- s3_bucket:
+    name: "{{ state_store | replace('s3://', '') }}"
+    state: absent
+    region: "{{ aws_region }}"
+    versioning: no
+    tags:
+      Name: "{{ state_store | replace('s3://', '') }}"
+      Creator: "{{ tag_creator }}"
+      Owner: "{{ tag_owner }}"
+      Application: "{{ tag_application }}"
+      CostCenter: "{{ tag_costcenter }}"
+      Confidentiality: "{{ tar_confidentiality }}"
+      Environment: "{{ tag_environment }}"
