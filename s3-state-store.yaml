@@ -1,0 +1,9 @@
+---
+###########################
+# Create S3 bucket for state store
+###########################
+
+- hosts: localhost
+  connection: local
+  roles:
+    - create-state-store
