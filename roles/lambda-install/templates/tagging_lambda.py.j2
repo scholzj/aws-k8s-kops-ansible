@@ -18,6 +18,7 @@ tag_Application = "{{ tag_application }}"
 tag_Confidentiality = "{{ tar_confidentiality }}"
 tag_CostCenter = "{{ tag_costcenter }}"
 tag_Owner = "{{ tag_owner }}"
+tag_Creator = "{{ tag_creator }}"
 tag_Environment = "{{ tag_environment }}"
 
 # Tag the resources ...
@@ -176,6 +177,9 @@ def prepare_new_tags(tags):
 
     if find_tag(tags, "Owner") != tag_Owner:
         newTags.append({'Key': 'Owner', 'Value': tag_Owner})
+
+    if find_tag(tags, "Creator") != tag_Owner:
+        newTags.append({'Key': 'Creator', 'Value': tag_Creator})
 
     if find_tag(tags, "Environment") != tag_Environment:
         newTags.append({'Key': 'Environment', 'Value': tag_Environment})

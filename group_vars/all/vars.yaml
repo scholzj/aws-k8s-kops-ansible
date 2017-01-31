@@ -21,8 +21,9 @@ node_size: t2.small
 node_count: 6
 
 # Tags
-tag_owner: schojak
+tag_creator: en341
+tag_owner: en341
 tag_application: DAVe
-tag_costcenter: 665050
+tag_costcenter: Risk
 tar_confidentiality: None
 tag_environment: DEV
