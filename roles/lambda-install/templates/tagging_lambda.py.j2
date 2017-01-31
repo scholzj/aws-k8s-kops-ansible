@@ -14,6 +14,7 @@ LOGGER.addHandler(log_handler)
 # Configuration
 region = "{{ aws_region}}"
 cluster = "{{ cluster_name }}"
+tag_Name = "{{ cluster_name }}-resource"
 tag_Application = "{{ tag_application }}"
 tag_Confidentiality = "{{ tag_confidentiality }}"
 tag_CostCenter = "{{ tag_costcenter }}"
@@ -165,6 +166,9 @@ def lambda_handler(event, context):
 # Check the existing tags and prepare a list with new tags
 def prepare_new_tags(tags):
     newTags = []
+
+    if find_tag(tags, "Name") == None:
+        newTags.append({'Key': 'Name', 'Value': tag_Name})
 
     if find_tag(tags, "Application") != tag_Application:
         newTags.append({'Key': 'Application', 'Value': tag_Application})
