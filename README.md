@@ -2,10 +2,10 @@
 
 ## Prerequisites
 
-* Install Kops (https://github.com/kubernetes/kops) (see below)
 * Install Ansible
+* Install Kops (https://github.com/kubernetes/kops) (see below)
 * Install kubectl (see below)
-* Create secure Amazon S3 bucket, which the Kops tool will use as the storage for cluster configurations. **The bucket will contain also the access details for the clusters configured with Kops. It should be secured accordingly.**
+* Create secure Amazon S3 bucket, which the Kops tool will use as the storage for cluster configurations. (see below) **The bucket will contain also the access details for the clusters configured with Kops. It should be secured accordingly.**
 
 ### Kubectl installation
 
@@ -19,6 +19,13 @@ ansible-playbook install-kubectl.yaml
 Playbook `install-kops.yaml` can be used for installing the latest version of Kops utility on Linux or MacOS. To install it run
 ```
 ansible-playbook install-kops.yaml
+```
+
+### S3 bucket for state store
+
+Playbook `create-state-store.yaml` can be used to create the S3 bucket to store the Kops state. To install it run
+```
+ansible-playbook create-state-store.yaml
 ```
 
 ## Install Kubernetes cluster
@@ -45,6 +52,7 @@ The main configuration of the cluster is in the variables in `group_vars/all/var
 | `node_count` | Nomber of EC2 worker hosts. | `6` |
 
 Additionally to the Kubernetes cluster it self, an AWS Lambda function will be created which will run periodically to tag all resources creating by Kops and by Kubernetes. It will use following tags:
+* Creator
 * Owner
 * Application
 * CostCenter
@@ -55,11 +63,14 @@ The tags are configured in also in `group_vars/all/vars.yaml` using following va
 
 | Option | Explanation | Example |
 |--------|-------------|---------|
+| `tag_creator` | Value for the Creator tag | `scholzj` |
 | `tag_owner` | Value for the Owner tag | `scholzj` |
 | `tag_application` | Value for the Application tag | `MyApp1` |
 | `tag_costcenter` | Value for the CostCenter tag | `123456` |
 | `tag_confidentiality` | Value for the Confidentiality tag | `StrictlyConfidential` |
 | `tag_environment` | Value for the Environment tag | `DEV` |
+
+Additionally to these tags, all resources without the `Name` tag will be named according to the cluster name (e.g. `kubernetes.my-cluster.com-resource`)
 
 ## Updating Kubernetes cluster
 
