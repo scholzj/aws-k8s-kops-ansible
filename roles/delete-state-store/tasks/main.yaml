@@ -16,5 +16,5 @@
       Owner: "{{ tag_owner }}"
       Application: "{{ tag_application }}"
       CostCenter: "{{ tag_costcenter }}"
-      Confidentiality: "{{ tar_confidentiality }}"
+      Confidentiality: "{{ tag_confidentiality }}"
       Environment: "{{ tag_environment }}"
