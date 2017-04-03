@@ -18,6 +18,7 @@ tag_Name = "{{ cluster_name }}-resource"
 tag_Application = "{{ tag_application }}"
 tag_Confidentiality = "{{ tag_confidentiality }}"
 tag_CostCenter = "{{ tag_costcenter }}"
+tag_Product = "{{ tag_product }}"
 tag_Owner = "{{ tag_owner }}"
 tag_Creator = "{{ tag_creator }}"
 tag_Environment = "{{ tag_environment }}"
@@ -178,6 +179,9 @@ def prepare_new_tags(tags):
 
     if find_tag(tags, "CostCenter") != tag_CostCenter:
         newTags.append({'Key': 'CostCenter', 'Value': tag_CostCenter})
+
+    if find_tag(tags, "Product") != tag_Product:
+        newTags.append({'Key': 'Product', 'Value': tag_Product})
 
     if find_tag(tags, "Owner") != tag_Owner:
         newTags.append({'Key': 'Owner', 'Value': tag_Owner})

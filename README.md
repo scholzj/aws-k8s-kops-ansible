@@ -56,6 +56,7 @@ Additionally to the Kubernetes cluster it self, an AWS Lambda function will be c
 * Owner
 * Application
 * CostCenter
+* Product
 * Confidentiality
 * Environment
 
@@ -67,6 +68,7 @@ The tags are configured in also in `group_vars/all/vars.yaml` using following va
 | `tag_owner` | Value for the Owner tag | `scholzj` |
 | `tag_application` | Value for the Application tag | `MyApp1` |
 | `tag_costcenter` | Value for the CostCenter tag | `123456` |
+| `tag_product` | Value for the Product tag | `Risk` |
 | `tag_confidentiality` | Value for the Confidentiality tag | `StrictlyConfidential` |
 | `tag_environment` | Value for the Environment tag | `DEV` |
 
