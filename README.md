@@ -97,6 +97,15 @@ To install the add-ons run
 ansible-playbook addons.yaml
 ```
 
+## Install ingress
+
+Ingress can be used route inbound traffic from the outside of the Kubernetes cluster. It can be used for SSL termination, virtual hosts, load balancing etc. For more details about ingress, go to [Kubernetes website](https://kubernetes.io/docs/concepts/services-networking/ingress/).
+
+To install ingress controller based on Nginx, run
+```
+ansible-playbook ingress.yaml
+```
+
 ## Install and deleting the tagging lambda function
 
 The AWS Lambda function for tagging of resources (the related IAM and CloudWatch objects) can be also installed and uninstalled separately. To install it run:

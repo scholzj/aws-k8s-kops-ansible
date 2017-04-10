@@ -1,0 +1,9 @@
+---
+###########################
+# Intstall Ingress
+###########################
+
+- hosts: localhost
+  connection: local
+  roles:
+    - ingress
