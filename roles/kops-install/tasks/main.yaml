@@ -11,6 +11,7 @@
     owner: root
     group: admin
     mode: 0755
+    force: yes
     # TODO Add hash check
   when: ansible_os_family == 'Darwin'
   become: true
@@ -22,6 +23,7 @@
     owner: root
     group: root
     mode: 0755
+    force: yes
     # TODO Add hash check
   when: ansible_os_family != 'Darwin'
   become: true
