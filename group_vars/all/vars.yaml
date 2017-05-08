@@ -17,6 +17,7 @@ kubernetes_networking: calico
 
 # EC2 host sizing
 master_size: t2.small
+master_count: 3
 node_size: t2.small
 node_count: 6
 
