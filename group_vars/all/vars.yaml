@@ -1,14 +1,14 @@
 ---
 
-cluster_name: dave-dev.dbg-devops.com
-state_store: s3://dave-dev-kops
+cluster_name: k8s-training.dbg-devops.com
+state_store: s3://k8s-training-kops
 
 # Remote access
 ssh_public_key: ~/.ssh/id_rsa.pub
 
 # Regions / Availability zones
 aws_region: eu-west-1
-aws_zones: eu-west-1a,eu-west-1b,eu-west-1c
+aws_zones: eu-west-1a
 
 # Network
 dns_zone: dbg-devops.com
@@ -16,16 +16,18 @@ network_cidr: 172.35.0.0/16
 kubernetes_networking: calico
 
 # EC2 host sizing
-master_size: t2.small
+master_size: t2.large
 master_count: 3
-node_size: t2.small
+master_volume_size: 50
+node_size: t2.large
 node_count: 6
+node_volume_size: 50
 
 # Tags
 tag_creator: en341
 tag_owner: en341
-tag_application: DAVe
-tag_costcenter: Risk
+tag_application: Training
+tag_costcenter: 665050
 tag_product: Risk
 tag_confidentiality: None
-tag_environment: DEV
+tag_environment: Training

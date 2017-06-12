@@ -49,8 +49,10 @@ The main configuration of the cluster is in the variables in `group_vars/all/var
 | `kubernetes_networking` | Defines which networking plugin should be used in Kubernetes. Tested with Calico only. | `calico` |
 | `master_size` | EC2 size of the nodes used for the Kubernetes masters (and Etcd hosts) | `t2.small` |
 | `master_count` | Number of EC2 master hosts. | `3` |
+| `master_volume_size` | Size of the master disk volume in GB. | `50` |
 | `node_size` | EC2 size of the nodes used as workers. | `t2.small` |
 | `node_count` | Number of EC2 worker hosts. | `6` |
+| `node_volume_size` | Size of the node disk volume in GB. | `50` |
 
 Additionally to the Kubernetes cluster it self, an AWS Lambda function will be created which will run periodically to tag all resources creating by Kops and by Kubernetes. It will use following tags:
 * Creator
