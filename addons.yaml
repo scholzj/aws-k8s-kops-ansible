@@ -10,3 +10,4 @@
     - storage
     - dashboard
     - heapster
+    - route53-mapper

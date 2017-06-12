@@ -1,0 +1,15 @@
+---
+
+####################
+# Install Route53 Mapper
+####################
+
+- name: Add Route53 Mapper deployment configuration
+  template:
+    src: route53-mapper.yaml.j2
+    dest: /tmp/route53-mapper.yaml
+    mode: 0644
+  become: false
+
+- name: Launch Heapster
+  command: "kubectl apply -f /tmp/route53-mapper.yaml"
