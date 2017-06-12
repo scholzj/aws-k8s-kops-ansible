@@ -92,6 +92,7 @@ Currently, the supported add-ons are:
 * Kubernetes dashboard
 * Heapster for resource monitoring
 * Storage class for automatic provisioning of persisitent volumes
+* Route53 Mapper
 
 To install the add-ons run
 ```
