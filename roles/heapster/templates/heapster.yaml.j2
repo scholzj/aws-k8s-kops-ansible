@@ -7,24 +7,25 @@ metadata:
     k8s-addon: monitoring-standalone.addons.k8s.io
     k8s-app: heapster
     kubernetes.io/cluster-service: "true"
-    version: v1.2.0
+    version: v1.6.0
 spec:
   replicas: 1
   selector:
     matchLabels:
       k8s-app: heapster
-      version: v1.2.0
+      version: v1.6.0
   template:
     metadata:
       labels:
         k8s-app: heapster
-        version: v1.2.0
+        version: v1.6.0
       annotations:
         scheduler.alpha.kubernetes.io/critical-pod: ''
         scheduler.alpha.kubernetes.io/tolerations: '[{"key":"CriticalAddonsOnly", "operator":"Exists"}]'
     spec:
+      serviceAccountName: heapster
       containers:
-        - image: gcr.io/google_containers/heapster:v1.2.0
+        - image: gcr.io/google_containers/heapster:v1.3.0
           name: heapster
           livenessProbe:
             httpGet:
@@ -44,7 +45,7 @@ spec:
           command:
             - /heapster
             - --source=kubernetes.summary_api:''
-        - image: gcr.io/google_containers/addon-resizer:1.6
+        - image: gcr.io/google_containers/addon-resizer:1.7
           name: heapster-nanny
           resources:
             limits:
@@ -89,3 +90,26 @@ spec:
       targetPort: 8082
   selector:
     k8s-app: heapster
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: heapster
+  namespace: kube-system
+  labels:
+    k8s-addon: monitoring-standalone.addons.k8s.io
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: heapster
+  labels:
+    k8s-addon: monitoring-standalone.addons.k8s.io
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: system:heapster
+subjects:
+- kind: ServiceAccount
+  name: heapster
+  namespace: kube-system
