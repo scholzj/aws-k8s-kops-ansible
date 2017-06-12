@@ -1,14 +1,14 @@
 ---
 
-cluster_name: k8s-training.dbg-devops.com
-state_store: s3://k8s-training-kops
+cluster_name: k8s-risk.dbg-devops.com
+state_store: s3://k8s-risk-kops
 
 # Remote access
 ssh_public_key: ~/.ssh/id_rsa.pub
 
 # Regions / Availability zones
-aws_region: eu-west-1
-aws_zones: eu-west-1a
+aws_region: eu-central-1
+aws_zones: eu-central-1a,eu-central-1b,eu-central-1c
 
 # Network
 dns_zone: dbg-devops.com
@@ -16,11 +16,11 @@ network_cidr: 172.35.0.0/16
 kubernetes_networking: calico
 
 # EC2 host sizing
-master_size: t2.large
+master_size: t2.medium
 master_count: 3
 master_volume_size: 50
-node_size: t2.large
-node_count: 6
+node_size: t2.medium
+node_count: 3
 node_volume_size: 50
 
 # Tags
