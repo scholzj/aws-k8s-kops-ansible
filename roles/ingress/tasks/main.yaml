@@ -6,117 +6,14 @@
 
 # Render templates
 
-- name: Add Ingress config map configuration
+- name: Render Ingress template
   template:
-    src: ingress.configmap.yaml.j2
-    dest: /tmp/ingress.configmap.yaml
+    src: ingress.yaml.j2
+    dest: /tmp/ingress.yaml
     mode: 0644
   become: false
 
-- name: Add Ingress service configuration
-  template:
-    src: ingress.service.yaml.j2
-    dest: /tmp/ingress.service.yaml
-    mode: 0644
-  become: false
+# Deploy ingress and default backend
 
-- name: Add Ingress deployment configuration
-  template:
-    src: ingress.deployment.yaml.j2
-    dest: /tmp/ingress.deployment.yaml
-    mode: 0644
-  become: false
-
-- name: Add default BE service configuration
-  template:
-    src: default-backend.service.yaml.j2
-    dest: /tmp/default-backend.service.yaml
-    mode: 0644
-  become: false
-
-- name: Add default BE deployment configuration
-  template:
-    src: default-backend.deployment.yaml.j2
-    dest: /tmp/default-backend.deployment.yaml
-    mode: 0644
-  become: false
-
-# Create namespace
-
-- name: Find out if namespace already exists
-  command: "kubectl get ns ingress -o json"
-  register: get_ns
-  ignore_errors: true
-
-- name: Create the namespace
-  command: "kubectl create ns ingress"
-  when: get_ns|failed
-
-# Create default backend
-
-- name: Find out if service already exists
-  command: "kubectl --namespace ingress get service nginx-default-backend -o json"
-  register: get_service
-  ignore_errors: true
-
-- name: Create the service
-  command: "kubectl --namespace ingress create -f /tmp/default-backend.service.yaml"
-  when: get_service|failed
-
-- name: Replace the service
-  command: "kubectl --namespace ingress apply -f /tmp/default-backend.service.yaml"
-  when: get_service|succeeded
-
-- name: Find out if deployment already exists
-  command: "kubectl --namespace ingress get deployment nginx-default-backend -o json"
-  register: get_deployment
-  ignore_errors: true
-
-- name: Create the deployment
-  command: "kubectl --namespace ingress create -f /tmp/default-backend.deployment.yaml"
-  when: get_deployment|failed
-
-- name: Replace the deployment
-  command: "kubectl --namespace ingress apply -f /tmp/default-backend.deployment.yaml"
-  when: get_deployment|succeeded
-
-# Create ingress controller and default backend
-
-- name: Find out if configmap already exists
-  command: "kubectl --namespace ingress get configmap ingress-nginx -o json"
-  register: get_configmap
-  ignore_errors: true
-
-- name: Create the configmap
-  command: "kubectl --namespace ingress create -f /tmp/ingress.configmap.yaml"
-  when: get_configmap|failed
-
-- name: Replace the configmap
-  command: "kubectl --namespace ingress apply -f /tmp/ingress.configmap.yaml"
-  when: get_configmap|succeeded
-
-- name: Find out if service already exists
-  command: "kubectl --namespace ingress get service ingress-nginx -o json"
-  register: get_service
-  ignore_errors: true
-
-- name: Create the service
-  command: "kubectl --namespace ingress create -f /tmp/ingress.service.yaml"
-  when: get_service|failed
-
-- name: Replace the service
-  command: "kubectl --namespace ingress apply -f /tmp/ingress.service.yaml"
-  when: get_service|succeeded
-
-- name: Find out if deployment already exists
-  command: "kubectl --namespace ingress get deployment ingress-nginx -o json"
-  register: get_deployment
-  ignore_errors: true
-
-- name: Create the deployment
-  command: "kubectl --namespace ingress create -f /tmp/ingress.deployment.yaml"
-  when: get_deployment|failed
-
-- name: Replace the deployment
-  command: "kubectl --namespace ingress apply -f /tmp/ingress.deployment.yaml"
-  when: get_deployment|succeeded
+- name: Deploy ingress and the default backend
+  command: "kubectl apply -f /tmp/ingress.yaml"
