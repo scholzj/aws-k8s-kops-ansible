@@ -12,4 +12,4 @@
   become: false
 
 - name: Load storage class into configuration
-  command: "kubectl create -f /tmp/storage-class.yaml"
+  command: "kubectl apply -f /tmp/storage-class.yaml"

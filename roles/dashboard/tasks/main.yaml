@@ -12,4 +12,4 @@
   become: false
 
 - name: Launch Kubernetes dashboard service
-  command: "kubectl create -f /tmp/kubernetes-dashboard.yaml"
+  command: "kubectl apply -f /tmp/kubernetes-dashboard.yaml"
