@@ -94,7 +94,8 @@ Currently, the supported add-ons are:
 * Kubernetes dashboard
 * Heapster for resource monitoring
 * Storage class for automatic provisioning of persisitent volumes
-* Route53 Mapper
+* Route53 Mapper (Obsolete - Replaced by External DNS)
+* External DNS (Replaces Route53 mapper)
 
 To install the add-ons run
 ```

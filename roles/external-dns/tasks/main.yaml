@@ -1,0 +1,15 @@
+---
+
+####################
+# Install External DNS
+####################
+
+- name: Add External DNS deployment configuration
+  template:
+    src: external-dns.yaml.j2
+    dest: /tmp/external-dns.yaml
+    mode: 0644
+  become: false
+
+- name: Launch External DNS
+  command: "kubectl apply -f /tmp/external-dns.yaml"

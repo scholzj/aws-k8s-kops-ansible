@@ -10,4 +10,5 @@
     - storage
     - dashboard
     - heapster
-    - route53-mapper
+    - external-dns
+    #- route53-mapper
