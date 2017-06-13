@@ -120,6 +120,7 @@ metadata:
     k8s-addon: ingress-nginx.addons.k8s.io
   annotations:
     service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: '*'
+    external-dns.alpha.kubernetes.io/hostname: ingress.{{ cluster_name }}.
     # Uncomment the line below to create internal load balancer
     # service.beta.kubernetes.io/aws-load-balancer-internal: '0.0.0.0/0'
   namespace: kube-system
