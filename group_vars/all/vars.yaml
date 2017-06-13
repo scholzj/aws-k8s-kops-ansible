@@ -1,6 +1,6 @@
 ---
 
-cluster_name: k8s-risk.dbg-devops.com
+cluster_name: k8s.risk.dbg-devops.com
 state_store: s3://k8s-risk-kops
 
 # Remote access
@@ -9,6 +9,10 @@ ssh_public_key: ~/.ssh/id_rsa.pub
 # Regions / Availability zones
 aws_region: eu-central-1
 aws_zones: eu-central-1a,eu-central-1b,eu-central-1c
+# Use master_zones if you want your masters in different zones than worker nodes.
+# Useful especially when you want 1 master in single zone but workers in several zones.
+# When not defined, aws_zones will be sued instead
+master_zones: eu-central-1a
 
 # Network
 dns_zone: dbg-devops.com
@@ -17,7 +21,7 @@ kubernetes_networking: calico
 
 # EC2 host sizing
 master_size: t2.medium
-master_count: 3
+master_count: 1
 master_volume_size: 50
 node_size: t2.medium
 node_count: 3

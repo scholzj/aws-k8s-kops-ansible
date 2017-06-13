@@ -44,6 +44,7 @@ The main configuration of the cluster is in the variables in `group_vars/all/var
 | `ssh_public_key` | Path to the public part of the SSH key, which should be used for the SSH access to the Kubernetes hosts | `~/.ssh/id_rsa.pub` |
 | `aws_region` | AWS region where the cluster should be installed. | `eu-west-1` |
 | `aws_zones` | List of availability zones in which the cluster should be installed. Must be an odd number (1, 3 or 5) of zones (at least 3 zones are needed for AWS setup accross availability zones). | `eu-west-1a,eu-west-1b,eu-west-1c` |
+| `master_zones` | List of availability zones in which the master nodes should be installed. Must be an odd number (1, 3 or 5) of zones (at least 3 zones are needed for AWS setup accross availability zones). If not specified, `aws_zones` will be used instead | `eu-west-1a,eu-west-1b,eu-west-1c` |
 | `dns_zone` | Name of the Rote 53 hosted zone. Must be reflected in the cluster name. | `my-cluster.com` |
 | `network_cidr` | A new VPC will be created. It will use the CIDR specified in this option. | `172.35.0.0/16` |
 | `kubernetes_networking` | Defines which networking plugin should be used in Kubernetes. Tested with Calico only. | `calico` |
