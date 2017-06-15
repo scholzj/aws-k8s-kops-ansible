@@ -1,5 +1,4 @@
 ---
-
 cluster_name: k8s.risk.dbg-devops.com
 state_store: s3://k8s-risk-kops
 
@@ -20,18 +19,20 @@ network_cidr: 172.35.0.0/16
 kubernetes_networking: calico
 
 # EC2 host sizing
-master_size: t2.medium
+master_size: m4.large
 master_count: 1
-master_volume_size: 50
-node_size: t2.medium
+master_volume_size: 100
+node_size: m4.xlarge
 node_count: 3
-node_volume_size: 50
+node_volume_size: 100
+node_autoscaler_min: 3
+node_autoscaler_max: 6
 
 # Tags
 tag_creator: en341
 tag_owner: en341
-tag_application: Training
+tag_application: DAVe
 tag_costcenter: 665050
 tag_product: Risk
 tag_confidentiality: None
-tag_environment: Training
+tag_environment: DEV

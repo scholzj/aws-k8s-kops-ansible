@@ -1,0 +1,15 @@
+---
+
+####################
+# Install Cluster Autoscaler
+####################
+
+- name: Add Cluster Autoscaler deployment configuration
+  template:
+    src: autoscaler.yaml.j2
+    dest: /tmp/autoscaler.yaml
+    mode: 0644
+  become: false
+
+- name: Launch Cluster Autoscaler
+  command: "kubectl apply -f /tmp/autoscaler.yaml"

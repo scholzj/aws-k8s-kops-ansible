@@ -52,8 +52,10 @@ The main configuration of the cluster is in the variables in `group_vars/all/var
 | `master_count` | Number of EC2 master hosts. | `3` |
 | `master_volume_size` | Size of the master disk volume in GB. | `50` |
 | `node_size` | EC2 size of the nodes used as workers. | `t2.small` |
-| `node_count` | Number of EC2 worker hosts. | `6` |
+| `node_count` | Number of EC2 worker hosts (initial count). | `6` |
 | `node_volume_size` | Size of the node disk volume in GB. | `50` |
+| `node_autoscaler_min` | Minimum number of nodes (for the autoscaler). | `3` |
+| `node_autoscaler_max` | Maximum number of nodes (for the autoscaler). | `6` |
 
 Additionally to the Kubernetes cluster it self, an AWS Lambda function will be created which will run periodically to tag all resources creating by Kops and by Kubernetes. It will use following tags:
 * Creator
@@ -97,6 +99,7 @@ Currently, the supported add-ons are:
 * Storage class for automatic provisioning of persisitent volumes
 * Route53 Mapper (Obsolete - Replaced by External DNS)
 * External DNS (Replaces Route53 mapper)
+* Cluster Autoscaler
 
 To install the add-ons run
 ```
