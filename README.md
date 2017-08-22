@@ -1,9 +1,32 @@
-# AWS deployment
+# Kubernetes setup on Amazon AWS using Kops and Ansible
+
+This repository contains tooling for deploying Kubernetes cluster in Amazon AWS using the [Kops](https://github.com/kubernetes/kops) tool. Kops is a great tool if you want to setup HA cluster and don't require too much flexibility. If you prefer flexibility instead of HA setup you should have a look at [another repsoitory](https://github.com/scholzj/aws-kubernetes) where I have Kubernetes setup implemented using Terraform and Kubeadm tool. I have also a [special *minikube* single node installation](https://github.com/scholzj/aws-minikube).
+
+<!-- TOC -->
+
+- [Kubernetes setup on Amazon AWS using Kops and Ansible](#kubernetes-setup-on-amazon-aws-using-kops-and-ansible)
+    - [Updates](#updates)
+    - [Prerequisites](#prerequisites)
+        - [Kubectl installation](#kubectl-installation)
+        - [Kops installation](#kops-installation)
+        - [S3 bucket for state store](#s3-bucket-for-state-store)
+    - [Install Kubernetes cluster](#install-kubernetes-cluster)
+    - [Updating Kubernetes cluster](#updating-kubernetes-cluster)
+    - [Delete Kubernetes cluster](#delete-kubernetes-cluster)
+    - [Install add-ons](#install-add-ons)
+    - [Install ingress](#install-ingress)
+    - [Install and deleting the tagging lambda function](#install-and-deleting-the-tagging-lambda-function)
+
+<!-- /TOC -->
+
+## Updates
+
+* *22.8.2017* Update to Kops 1.7 and Kubernetes 1.7
 
 ## Prerequisites
 
 * Install Ansible
-* Install Kops (https://github.com/kubernetes/kops) (see below)
+* Install [Kops](https://github.com/kubernetes/kops) (see below)
 * Install kubectl (see below)
 * Create secure Amazon S3 bucket, which the Kops tool will use as the storage for cluster configurations. (see below) **The bucket will contain also the access details for the clusters configured with Kops. It should be secured accordingly.**
 
