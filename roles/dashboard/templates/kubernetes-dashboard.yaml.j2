@@ -27,7 +27,7 @@ metadata:
   labels:
     k8s-addon: kubernetes-dashboard.addons.k8s.io
     k8s-app: kubernetes-dashboard
-    version: v1.6.1
+    version: v1.6.3
     kubernetes.io/cluster-service: "true"
   name: kubernetes-dashboard
   namespace: kube-system
@@ -41,7 +41,7 @@ spec:
       labels:
         k8s-addon: kubernetes-dashboard.addons.k8s.io
         k8s-app: kubernetes-dashboard
-        version: v1.6.1
+        version: v1.6.3
         kubernetes.io/cluster-service: "true"
       annotations:
         scheduler.alpha.kubernetes.io/critical-pod: ''
@@ -49,7 +49,7 @@ spec:
     spec:
       containers:
       - name: kubernetes-dashboard
-        image: gcr.io/google_containers/kubernetes-dashboard-amd64:v1.6.1
+        image: gcr.io/google_containers/kubernetes-dashboard-amd64:v1.6.3
         ports:
         - containerPort: 9090
           protocol: TCP
