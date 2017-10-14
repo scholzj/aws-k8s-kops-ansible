@@ -21,6 +21,7 @@ This repository contains tooling for deploying Kubernetes cluster in Amazon AWS 
 
 ## Updates
 
+* *14.10.2017* Update to Kops 1.7.1 which fixes [CVE-2017-14491](https://github.com/kubernetes/kops/blob/master/docs/advisories/cve_2017_14491.md)
 * *22.8.2017* Update to Kops 1.7 and Kubernetes 1.7
 
 ## Prerequisites

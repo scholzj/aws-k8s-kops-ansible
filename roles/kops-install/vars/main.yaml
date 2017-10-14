@@ -1,5 +1,5 @@
 ---
 
-kops_version: "1.7.0"
+kops_version: "1.7.1"
 kops_download_path: "https://github.com/kubernetes/kops/releases/download/{{ kops_version }}/kops-linux-amd64"
 kops_darwin_download_path: "https://github.com/kubernetes/kops/releases/download/{{ kops_version }}/kops-darwin-amd64"
