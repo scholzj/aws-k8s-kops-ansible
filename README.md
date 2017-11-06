@@ -150,11 +150,17 @@ ansible-playbook install-lambda.yaml
 
 ## Updating the cluster
 
-The Kubernetes cluster setup is done using the Kops tool only. All updates to it can be done using Kops. The Ansible playbooks from this project only simplify the initial setup.
+All updates to the running Kubernetes cluster can be done directly using `Kops`. The Ansible playbooks from this project only simplify the initial setup.
 
 ## Deleting the cluster
 
-To delete the cluster run
+To delete the cluster export the AWS credentials:
+```
+export AWS_ACCESS_KEY_ID="XXX"
+export AWS_SECRET_ACCESS_KEY="XXX"
+```
+
+And run:
 ```
 ansible-playbook delete.yaml
 ```
