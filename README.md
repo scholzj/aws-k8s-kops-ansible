@@ -2,20 +2,22 @@
 
 This repository contains tooling for deploying Kubernetes cluster in Amazon AWS using the [Kops](https://github.com/kubernetes/kops) tool. Kops is a great tool if you want to setup HA cluster and don't require too much flexibility. If you prefer flexibility instead of HA setup you should have a look at [another repsoitory](https://github.com/scholzj/aws-kubernetes) where I have Kubernetes setup implemented using Terraform and Kubeadm tool. I have also a [special *minikube* single node installation](https://github.com/scholzj/aws-minikube).
 
-<!-- TOC -->
+<!-- TOC depthFrom:2 -->
 
-- [Kubernetes setup on Amazon AWS using Kops and Ansible](#kubernetes-setup-on-amazon-aws-using-kops-and-ansible)
-    - [Updates](#updates)
-    - [Prerequisites](#prerequisites)
-        - [Kubectl installation](#kubectl-installation)
-        - [Kops installation](#kops-installation)
-        - [S3 bucket for state store](#s3-bucket-for-state-store)
+- [Updates](#updates)
+- [Installing the cluster](#installing-the-cluster)
+    - [Install Ansible](#install-ansible)
+    - [Kubectl installation](#kubectl-installation)
+    - [Kops installation](#kops-installation)
+    - [AWS Credentials](#aws-credentials)
+    - [S3 bucket for state store](#s3-bucket-for-state-store)
     - [Install Kubernetes cluster](#install-kubernetes-cluster)
-    - [Updating Kubernetes cluster](#updating-kubernetes-cluster)
-    - [Delete Kubernetes cluster](#delete-kubernetes-cluster)
-    - [Install add-ons](#install-add-ons)
-    - [Install ingress](#install-ingress)
-    - [Install and deleting the tagging lambda function](#install-and-deleting-the-tagging-lambda-function)
+    - [Install add-ons (optional)](#install-add-ons-optional)
+    - [Install ingress (optional)](#install-ingress-optional)
+    - [Install the tagging lambda function (optional)](#install-the-tagging-lambda-function-optional)
+- [Updating the cluster](#updating-the-cluster)
+- [Deleting the cluster](#deleting-the-cluster)
+    - [Deleting the tagging lambda function](#deleting-the-tagging-lambda-function)
 
 <!-- /TOC -->
 
@@ -24,37 +26,48 @@ This repository contains tooling for deploying Kubernetes cluster in Amazon AWS 
 * *14.10.2017* Update to Kops 1.7.1 which fixes [CVE-2017-14491](https://github.com/kubernetes/kops/blob/master/docs/advisories/cve_2017_14491.md)
 * *22.8.2017* Update to Kops 1.7 and Kubernetes 1.7
 
-## Prerequisites
+## Installing the cluster
 
-* Install Ansible
-* Install [Kops](https://github.com/kubernetes/kops) (see below)
-* Install kubectl (see below)
-* Create secure Amazon S3 bucket, which the Kops tool will use as the storage for cluster configurations. (see below) **The bucket will contain also the access details for the clusters configured with Kops. It should be secured accordingly.**
+The cluster can be deployed from your local host (tested with MacOS and Linux) by following the steps described below. If you cannot install Ansible, kubectl or kops on your local PC or in case your local PC is running Windows, you can create a EC2 host in Aamzon AWS and run the installation from this host.
+
+### Install Ansible
+
+Download and install Ansible - you can follow the guide from [Ansible website](http://docs.ansible.com/ansible/latest/intro_installation.html).
 
 ### Kubectl installation
 
-Playbook `install-kubectl.yaml` can be used for installing the latest version of kubectl on Linux or MacOS. To install it run
+Install the latest version of `kubectl` on Linux or MacOS:
 ```
 ansible-playbook install-kubectl.yaml
 ```
 
 ### Kops installation
 
-Playbook `install-kops.yaml` can be used for installing the latest version of Kops utility on Linux or MacOS. To install it run
+Install the latest version of `Kops` utility on Linux or MacOS:
 ```
 ansible-playbook install-kops.yaml
 ```
 
+### AWS Credentials
+
+Export the AWS credentials whih will be used to authenticate with Amazon AWS:
+```
+export AWS_ACCESS_KEY_ID="XXX"
+export AWS_SECRET_ACCESS_KEY="XXX"
+```
+
 ### S3 bucket for state store
 
-Playbook `create-state-store.yaml` can be used to create the S3 bucket to store the Kops state. To install it run
+Create S3 bucket to store where `Kops` will store its information:
 ```
 ansible-playbook create-state-store.yaml
 ```
 
-## Install Kubernetes cluster
+**The bucket will contain also the access details for the clusters configured with Kops. It should be secured accordingly.**
 
-The Kubernetes cluster can be created by running
+### Install Kubernetes cluster
+
+Create the Kubernetes cluster using `Kops`:
 ```
 ansible-playbook create.yaml
 ```
@@ -104,18 +117,7 @@ The tags are configured in also in `group_vars/all/vars.yaml` using following va
 
 Additionally to these tags, all resources without the `Name` tag will be named according to the cluster name (e.g. `kubernetes.my-cluster.com-resource`)
 
-## Updating Kubernetes cluster
-
-The Kubernetes cluster setup is done using the Kops tool only. All updates to it can be done using Kops. The Ansible playbooks from this project only simplify the initial setup.
-
-## Delete Kubernetes cluster
-
-To delete the cluster run
-```
-ansible-playbook delete.yaml
-```
-
-## Install add-ons
+### Install add-ons (optional)
 
 Currently, the supported add-ons are:
 * Kubernetes dashboard
@@ -130,7 +132,7 @@ To install the add-ons run
 ansible-playbook addons.yaml
 ```
 
-## Install ingress
+### Install ingress (optional)
 
 Ingress can be used route inbound traffic from the outside of the Kubernetes cluster. It can be used for SSL termination, virtual hosts, load balancing etc. For more details about ingress, go to [Kubernetes website](https://kubernetes.io/docs/concepts/services-networking/ingress/).
 
@@ -139,14 +141,27 @@ To install ingress controller based on Nginx, run
 ansible-playbook ingress.yaml
 ```
 
-## Install and deleting the tagging lambda function
+### Install the tagging lambda function (optional)
 
-The AWS Lambda function for tagging of resources (the related IAM and CloudWatch objects) can be also installed and uninstalled separately. To install it run:
+The AWS Lambda function can be used for tagging of resources created by the Kubernetes installation. To install it run:
 ```
 ansible-playbook install-lambda.yaml
 ```
 
-To uninstall it run:
+## Updating the cluster
+
+The Kubernetes cluster setup is done using the Kops tool only. All updates to it can be done using Kops. The Ansible playbooks from this project only simplify the initial setup.
+
+## Deleting the cluster
+
+To delete the cluster run
+```
+ansible-playbook delete.yaml
+```
+
+### Deleting the tagging lambda function
+
+If you installed the AWS Lambda for tagging, you can remove it using this command:
 ```
 ansible-playbook uninstall-lambda.yaml
 ```
