@@ -181,5 +181,5 @@ ansible-playbook uninstall-lambda.yaml
 The Kubernetes Dashboard addon is by default not exposed to the internet. This is intentional for security reasons (no authentication / authorization) and to save costs for Amazon AWS ELB load balancer.
 
 You can access the dashboard easily fro any computer with installed and configured `kubectl`:
-1) From coomand line start `kubectl proxy`
+1) From command line start `kubectl proxy`
 2) Go to your browser and open [http://127.0.0.1:8001/ui](http://127.0.0.1:8001/ui)
