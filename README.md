@@ -18,6 +18,8 @@ This repository contains tooling for deploying Kubernetes cluster in Amazon AWS 
 - [Updating the cluster](#updating-the-cluster)
 - [Deleting the cluster](#deleting-the-cluster)
     - [Deleting the tagging lambda function](#deleting-the-tagging-lambda-function)
+- [Frequently Asked Questions](#frequently-asked-questions)
+    - [How to access Kuberntes Dashboard](#how-to-access-kuberntes-dashboard)
 
 <!-- /TOC -->
 
@@ -171,3 +173,13 @@ If you installed the AWS Lambda for tagging, you can remove it using this comman
 ```
 ansible-playbook uninstall-lambda.yaml
 ```
+
+## Frequently Asked Questions
+
+### How to access Kuberntes Dashboard
+
+The Kubernetes Dashboard addon is by default not exposed to the internet. This is intentional for security reasons (no authentication / authorization) and to save costs for Amazon AWS ELB load balancer.
+
+You can access the dashboard easily fro any computer with installed and configured `kubectl`:
+1) From coomand line start `kubectl proxy`
+2) Go to your browser and open [http://127.0.0.1:8001/ui](http://127.0.0.1:8001/ui)
