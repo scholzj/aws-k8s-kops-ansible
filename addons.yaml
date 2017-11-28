@@ -11,4 +11,5 @@
     - dashboard
     - heapster
     - external-dns
+    - autoscaler
     #- route53-mapper

@@ -7,25 +7,25 @@ metadata:
     k8s-addon: monitoring-standalone.addons.k8s.io
     k8s-app: heapster
     kubernetes.io/cluster-service: "true"
-    version: v1.6.0
+    version: v1.4.3
 spec:
   replicas: 1
   selector:
     matchLabels:
       k8s-app: heapster
-      version: v1.6.0
+      version: v1.4.3
   template:
     metadata:
       labels:
         k8s-app: heapster
-        version: v1.6.0
+        version: v1.4.3
       annotations:
         scheduler.alpha.kubernetes.io/critical-pod: ''
         scheduler.alpha.kubernetes.io/tolerations: '[{"key":"CriticalAddonsOnly", "operator":"Exists"}]'
     spec:
       serviceAccountName: heapster
       containers:
-        - image: gcr.io/google_containers/heapster:v1.3.0
+        - image: gcr.io/google_containers/heapster:v1.4.3
           name: heapster
           livenessProbe:
             httpGet:
