@@ -87,10 +87,10 @@ The main configuration of the cluster is in the variables in `group_vars/all/var
 | `dns_zone` | Name of the Rote 53 hosted zone. Must be reflected in the cluster name. | `my-cluster.com` |
 | `network_cidr` | A new VPC will be created. It will use the CIDR specified in this option. | `172.16.0.0/16` |
 | `kubernetes_networking` | Defines which networking plugin should be used in Kubernetes. Tested with Calico only. | `calico` |
-| `master_size` | EC2 size of the nodes used for the Kubernetes masters (and Etcd hosts) | `t2.small` |
+| `master_size` | EC2 size of the nodes used for the Kubernetes masters (and Etcd hosts) | `m4.large` |
 | `master_count` | Number of EC2 master hosts. | `3` |
 | `master_volume_size` | Size of the master disk volume in GB. | `50` |
-| `node_size` | EC2 size of the nodes used as workers. | `t2.small` |
+| `node_size` | EC2 size of the nodes used as workers. | `m4.large` |
 | `node_count` | Number of EC2 worker hosts (initial count). | `6` |
 | `node_volume_size` | Size of the node disk volume in GB. | `50` |
 | `node_autoscaler_min` | Minimum number of nodes (for the autoscaler). | `3` |
@@ -109,13 +109,13 @@ The tags are configured in also in `group_vars/all/vars.yaml` using following va
 
 | Option | Explanation | Example |
 |--------|-------------|---------|
-| `tag_creator` | Value for the Creator tag | `scholzj` |
-| `tag_owner` | Value for the Owner tag | `scholzj` |
-| `tag_application` | Value for the Application tag | `MyApp1` |
-| `tag_costcenter` | Value for the CostCenter tag | `123456` |
-| `tag_product` | Value for the Product tag | `Risk` |
+| `tag_creator` | Value for the Creator tag | `MyName` |
+| `tag_owner` | Value for the Owner tag | `MyName` |
+| `tag_application` | Value for the Application tag | `MyApp` |
+| `tag_costcenter` | Value for the CostCenter tag | `1234` |
+| `tag_product` | Value for the Product tag | `MyProduct` |
 | `tag_confidentiality` | Value for the Confidentiality tag | `StrictlyConfidential` |
-| `tag_environment` | Value for the Environment tag | `DEV` |
+| `tag_environment` | Value for the Environment tag | `Development` |
 
 Additionally to these tags, all resources without the `Name` tag will be named according to the cluster name (e.g. `kubernetes.my-cluster.com-resource`)
 

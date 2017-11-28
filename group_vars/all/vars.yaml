@@ -1,6 +1,6 @@
 ---
-cluster_name: k8s.mydomain.com
-state_store: s3://kops-k8s-mydomain-com
+cluster_name: kubernetes.my-cluster.com
+state_store: s3://kops-state-store
 
 # Remote access
 ssh_public_key: ~/.ssh/id_rsa.pub
@@ -14,7 +14,7 @@ aws_zones: us-east-1a,us-east-1b,us-east-1c
 master_zones: us-east-1a
 
 # Network
-dns_zone: mydomain.com
+dns_zone: my-cluster.com
 network_cidr: 172.16.0.0/16
 kubernetes_networking: calico
 
@@ -22,7 +22,7 @@ kubernetes_networking: calico
 master_size: m4.large
 master_count: 1
 master_volume_size: 50
-node_size: m4.xlarge
+node_size: m4.large
 node_count: 1
 node_volume_size: 50
 node_autoscaler_min: 1
@@ -31,8 +31,8 @@ node_autoscaler_max: 6
 # Tags
 tag_creator: MyName
 tag_owner: MyName
-tag_application: Kubernetes
+tag_application: MyApp
 tag_costcenter: 1234
-tag_product: None
-tag_confidentiality: None
+tag_product: MyProduct
+tag_confidentiality: StrictlyConfidential
 tag_environment: Development
