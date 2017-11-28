@@ -1,38 +1,38 @@
 ---
-cluster_name: k8s.risk.dbg-devops.com
-state_store: s3://k8s-risk-kops
+cluster_name: k8s.mydomain.com
+state_store: s3://kops-k8s-mydomain-com
 
 # Remote access
 ssh_public_key: ~/.ssh/id_rsa.pub
 
 # Regions / Availability zones
-aws_region: eu-central-1
-aws_zones: eu-central-1a,eu-central-1b,eu-central-1c
+aws_region: us-east-1
+aws_zones: us-east-1a,us-east-1b,us-east-1c
 # Use master_zones if you want your masters in different zones than worker nodes.
 # Useful especially when you want 1 master in single zone but workers in several zones.
 # When not defined, aws_zones will be sued instead
-master_zones: eu-central-1a
+master_zones: us-east-1a
 
 # Network
-dns_zone: dbg-devops.com
+dns_zone: mydomain.com
 network_cidr: 172.16.0.0/16
 kubernetes_networking: calico
 
 # EC2 host sizing
 master_size: m4.large
 master_count: 1
-master_volume_size: 100
+master_volume_size: 50
 node_size: m4.xlarge
-node_count: 3
-node_volume_size: 100
-node_autoscaler_min: 3
+node_count: 1
+node_volume_size: 50
+node_autoscaler_min: 1
 node_autoscaler_max: 6
 
 # Tags
-tag_creator: en341
-tag_owner: en341
-tag_application: DAVe
-tag_costcenter: 665050
-tag_product: Risk
+tag_creator: MyName
+tag_owner: MyName
+tag_application: Kubernetes
+tag_costcenter: 1234
+tag_product: None
 tag_confidentiality: None
-tag_environment: DEV
+tag_environment: Development
