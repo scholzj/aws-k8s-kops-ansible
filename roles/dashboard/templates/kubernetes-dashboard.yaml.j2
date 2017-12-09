@@ -25,31 +25,23 @@ kind: Deployment
 apiVersion: extensions/v1beta1
 metadata:
   labels:
-    k8s-addon: kubernetes-dashboard.addons.k8s.io
     k8s-app: kubernetes-dashboard
-    version: v1.7.0
-    kubernetes.io/cluster-service: "true"
   name: kubernetes-dashboard
   namespace: kube-system
 spec:
   replicas: 1
+  revisionHistoryLimit: 10
   selector:
     matchLabels:
       k8s-app: kubernetes-dashboard
   template:
     metadata:
       labels:
-        k8s-addon: kubernetes-dashboard.addons.k8s.io
         k8s-app: kubernetes-dashboard
-        version: v1.7.0
-        kubernetes.io/cluster-service: "true"
-      annotations:
-        scheduler.alpha.kubernetes.io/critical-pod: ''
-        scheduler.alpha.kubernetes.io/tolerations: '[{"key":"CriticalAddonsOnly", "operator":"Exists"}]'
     spec:
       containers:
       - name: kubernetes-dashboard
-        image: gcr.io/google_containers/kubernetes-dashboard-amd64:v1.7.1
+        image: gcr.io/google_containers/kubernetes-dashboard-amd64:v1.8.0
         ports:
         - containerPort: 9090
           protocol: TCP
