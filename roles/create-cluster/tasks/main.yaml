@@ -4,12 +4,21 @@
 # Create Kubernetes cluster using Kops
 ####################
 
-- name: List clusters
-  shell: "kops create clusters --state {{ state_store }}"
-  register: get_clusters
+- set_fact:
+    topology: "public"
+  when: topology != "private"
+
+- set_fact:
+    bastion: "false"
+    public_ip: "true"
+
+- set_fact:
+    bastion: "true"
+    public_ip: "false"
+  when: topology == "private"
 
 - name: Configure the cluster
-  shell: "kops create cluster --associate-public-ip=false --bastion=true --cloud=aws --dns-zone={{ dns_zone }} --master-size={{ master_size }} --master-zones={{ master_zones|default(aws_zones) }} --master-count={{ master_count }} --master-volume-size={{ master_volume_size }} --network-cidr={{ network_cidr }} --networking={{ kubernetes_networking }} --node-count={{ node_count }} --node-size={{ node_size }} --node-volume-size={{ node_volume_size }} --target=direct --topology=private --zones={{ aws_zones }} --ssh-public-key={{ ssh_public_key }} --name={{ cluster_name }} --state {{ state_store }} --cloud-labels=\"Application={{ tag_application }},Confidentiality={{ tag_confidentiality }},CostCenter={{ tag_costcenter }},Product={{ tag_product }},Owner={{ tag_owner }},Creator={{ tag_creator }},Environment={{ tag_environment }}\" --authorization=rbac --encrypt-etcd-storage"
+  shell: "kops create cluster --associate-public-ip={{ public_ip }} --bastion={{ bastion }} --cloud=aws --dns-zone={{ dns_zone }} --master-size={{ master_size }} --master-zones={{ master_zones|default(aws_zones) }} --master-count={{ master_count }} --master-volume-size={{ master_volume_size }} --network-cidr={{ network_cidr }} --networking={{ kubernetes_networking }} --node-count={{ node_count }} --node-size={{ node_size }} --node-volume-size={{ node_volume_size }} --target=direct --topology={{ topology }} --zones={{ aws_zones }} --ssh-public-key={{ ssh_public_key }} --name={{ cluster_name }} --state {{ state_store }} --cloud-labels=\"Application={{ tag_application }},Confidentiality={{ tag_confidentiality }},CostCenter={{ tag_costcenter }},Product={{ tag_product }},Owner={{ tag_owner }},Creator={{ tag_creator }},Environment={{ tag_environment }}\" --authorization=rbac --encrypt-etcd-storage"
 
 - name: Create the physical cluster
   shell: "kops update cluster {{ cluster_name }} --yes --state {{ state_store }}"

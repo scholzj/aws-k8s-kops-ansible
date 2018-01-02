@@ -17,6 +17,7 @@ master_zones: us-east-1a
 dns_zone: my-cluster.com
 network_cidr: 172.16.0.0/16
 kubernetes_networking: calico
+topology: private
 
 # EC2 host sizing
 master_size: m4.large

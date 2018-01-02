@@ -25,6 +25,7 @@ This repository contains tooling for deploying Kubernetes cluster in Amazon AWS 
 
 ## Updates
 
+* *2.1.2018* Add support for public and private topologies
 * *9.12.2017* Update to Kops 1.8 and Kubernetes 1.8
 * *28.11.2017* Update addon versions
 * *14.10.2017* Update to Kops 1.7.1 which fixes [CVE-2017-14491](https://github.com/kubernetes/kops/blob/master/docs/advisories/cve_2017_14491.md)
@@ -88,6 +89,7 @@ The main configuration of the cluster is in the variables in `group_vars/all/var
 | `master_zones` | List of availability zones in which the master nodes should be installed. Must be an odd number (1, 3 or 5) of zones (at least 3 zones are needed for AWS setup accross availability zones). If not specified, `aws_zones` will be used instead | `eu-west-1a,eu-west-1b,eu-west-1c` |
 | `dns_zone` | Name of the Rote 53 hosted zone. Must be reflected in the cluster name. | `my-cluster.com` |
 | `network_cidr` | A new VPC will be created. It will use the CIDR specified in this option. | `172.16.0.0/16` |
+| `topology` | Defines whether the cluster should be deployed into private subnet (`private` - more secure) with bastion host or into public subnet (`public` - less secure). | `private` |
 | `kubernetes_networking` | Defines which networking plugin should be used in Kubernetes. Tested with Calico only. | `calico` |
 | `master_size` | EC2 size of the nodes used for the Kubernetes masters (and Etcd hosts) | `m4.large` |
 | `master_count` | Number of EC2 master hosts. | `3` |
