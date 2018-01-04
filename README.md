@@ -45,6 +45,8 @@ Install the latest version of `kubectl` on Linux or MacOS:
 ```
 ansible-playbook install-kubectl.yaml
 ```
+You may need either `--ask-sudo-pass` or `ansible_become_pass`
+
 
 ### Kops installation
 
@@ -52,6 +54,7 @@ Install the latest version of `Kops` utility on Linux or MacOS:
 ```
 ansible-playbook install-kops.yaml
 ```
+You may need either `--ask-sudo-pass` or `ansible_become_pass`
 
 ### AWS Credentials
 
