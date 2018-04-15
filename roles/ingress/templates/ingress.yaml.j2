@@ -84,6 +84,15 @@ rules:
   verbs:
   - update
   - get
+- apiGroups:
+  - ""
+  resources:
+  - configmaps
+  resourceNames:
+  - ingress-controller-leader-nginx
+  verbs:
+  - update
+  - get
 ---
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: RoleBinding
@@ -120,9 +129,6 @@ metadata:
     k8s-addon: ingress-nginx.addons.k8s.io
   annotations:
     service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: '*'
-    external-dns.alpha.kubernetes.io/hostname: ingress.{{ cluster_name }}.
-    # Uncomment the line below to create internal load balancer
-    # service.beta.kubernetes.io/aws-load-balancer-internal: '0.0.0.0/0'
   namespace: kube-system
 spec:
   type: LoadBalancer
@@ -146,6 +152,16 @@ metadata:
 data:
   use-proxy-protocol: "true"
 ---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: ingress-controller-leader-nginx
+  labels:
+    k8s-addon: ingress-nginx.addons.k8s.io
+  namespace: kube-system
+data:
+  # Nothing to include
+---
 kind: Deployment
 apiVersion: extensions/v1beta1
 metadata:
@@ -164,7 +180,7 @@ spec:
       terminationGracePeriodSeconds: 60
       serviceAccountName: ingress
       containers:
-      - image: quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.9.0-beta.18
+      - image: quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.12.0
         name: ingress-nginx
         imagePullPolicy: Always
         ports:

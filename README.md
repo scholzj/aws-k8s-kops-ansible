@@ -25,6 +25,7 @@ This repository contains tooling for deploying Kubernetes cluster in Amazon AWS 
 
 ## Updates
 
+* *15.4.2018* Update to Kops 1.9 and Kubernetes 1.9, update addons, remove Route53 addon (replaced by ExternalDNS addon)
 * *2.1.2018* Add support for public and private topologies
 * *9.12.2017* Update to Kops 1.8 and Kubernetes 1.8
 * *28.11.2017* Update addon versions
@@ -132,8 +133,7 @@ Currently, the supported add-ons are:
 * Kubernetes dashboard
 * Heapster for resource monitoring
 * Storage class for automatic provisioning of persisitent volumes
-* Route53 Mapper (Obsolete - Replaced by External DNS)
-* External DNS (Replaces Route53 mapper)
+* External DNS
 * Cluster Autoscaler
 
 To install the add-ons run

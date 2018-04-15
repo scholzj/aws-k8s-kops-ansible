@@ -22,7 +22,7 @@ subjects:
   namespace: kube-system
 ---
 kind: Deployment
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1beta2
 metadata:
   labels:
     k8s-app: kubernetes-dashboard
@@ -41,33 +41,51 @@ spec:
     spec:
       containers:
       - name: kubernetes-dashboard
-        image: gcr.io/google_containers/kubernetes-dashboard-amd64:v1.8.0
+        image: gcr.io/google_containers/kubernetes-dashboard-amd64:v1.8.3
         ports:
-        - containerPort: 9090
+        - containerPort: 8443
           protocol: TCP
         args:
+          - --auto-generate-certificates
           # Uncomment the following line to manually specify Kubernetes API server Host
           # If not specified, Dashboard will attempt to auto discover the API server and connect
           # to it. Uncomment only if the default does not work.
           # - --apiserver-host=http://my-address:port
+        volumeMounts:
+        - name: kubernetes-dashboard-certs
+          mountPath: /certs
+          # Create on-disk volume to store exec logs
+        - mountPath: /tmp
+          name: tmp-volume
         livenessProbe:
           httpGet:
+            scheme: HTTPS
             path: /
-            port: 9090
+            port: 8443
           initialDelaySeconds: 30
           timeoutSeconds: 30
+      volumes:
+      - name: kubernetes-dashboard-certs
+        emptyDir: {}
+      - name: tmp-volume
+        emptyDir: {}
       serviceAccountName: kubernetes-dashboard
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        effect: NoSchedule
 ---
 kind: Service
 apiVersion: v1
 metadata:
   labels:
     k8s-app: kubernetes-dashboard
+    kubernetes.io/cluster-service: 'true'
+    kubernetes.io/name: Dashboard
   name: kubernetes-dashboard
   namespace: kube-system
 spec:
   ports:
-  - port: 80
-    targetPort: 9090
+  - port: 443
+    targetPort: 8443
   selector:
     k8s-app: kubernetes-dashboard
