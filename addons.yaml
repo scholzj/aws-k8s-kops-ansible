@@ -7,7 +7,6 @@
   connection: local
   roles:
     - kubectl-config
-    - storage
     - dashboard
     - heapster
     - external-dns

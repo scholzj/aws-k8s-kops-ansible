@@ -1,6 +1,6 @@
 ---
-cluster_name: kubernetes.my-cluster.com
-state_store: s3://kops-state-store
+cluster_name: kubernetes.j9z.cz
+state_store: s3://kops-state-store-j9z-cz
 
 # Remote access
 ssh_public_key: ~/.ssh/id_rsa.pub
@@ -14,16 +14,16 @@ aws_zones: us-east-1a,us-east-1b,us-east-1c
 master_zones: us-east-1a
 
 # Network
-dns_zone: my-cluster.com
+dns_zone: j9z.cz
 network_cidr: 172.16.0.0/16
 kubernetes_networking: calico
-topology: private
+topology: public
 
 # EC2 host sizing
-master_size: m4.large
+master_size: t2.medium
 master_count: 1
 master_volume_size: 50
-node_size: m4.large
+node_size: t2.medium
 node_count: 1
 node_volume_size: 50
 node_autoscaler_min: 1
