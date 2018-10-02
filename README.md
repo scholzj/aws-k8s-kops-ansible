@@ -34,7 +34,7 @@ This repository contains tooling for deploying Kubernetes cluster in Amazon AWS 
 
 ## Installing the cluster
 
-The cluster can be deployed from your local host (tested with MacOS and Linux) by following the steps described below. If you cannot install Ansible, kubectl or kops on your local PC or in case your local PC is running Windows, you can create a EC2 host in Aamzon AWS and run the installation from this host.
+The cluster can be deployed from your local host (tested with MacOS and Linux) by following the steps described below. If you cannot install Ansible, kubectl or kops on your local PC or in case your local PC is running Windows, you can create a EC2 host in Amazon AWS and run the installation from this host.
 
 ### Install Ansible
 
