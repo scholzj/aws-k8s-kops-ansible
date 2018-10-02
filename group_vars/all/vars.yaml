@@ -30,13 +30,23 @@ base_image: kope.io/k8s-1.11-debian-stretch-amd64-hvm-ebs-2018-08-17
 master_size: t2.medium
 master_count: 1
 master_volume_size: 50
+# Use master_max_price if you want to use spot instances.
+# Useful to reduce cost during testing
+#master_max_price: 0.05
+# Use master_profile if you want custom iam policies
+#master_profile: arn:aws:iam::1234567890108:instance-profile/kops-custom-master-role
 
 # Node configuration
 node_size: t2.medium
 node_count: 1
 node_volume_size: 50
+# Use node_max_price if you want to use spot instances.
+# Useful to reduce cost during testing
+#node_max_price: 0.05
 node_autoscaler_min: 1
 node_autoscaler_max: 6
+# Use node_profile if you want custom iam policies
+#node_profile: arn:aws:iam::1234567890108:instance-profile/kops-custom-node-role
 
 
 ## Tags
@@ -51,3 +61,9 @@ tag_environment: Development
 
 ## Cluster spec
 kubernetes_version: 1.11
+
+
+# IAM
+iam:
+  allow_container_registry: true
+  legacy: false

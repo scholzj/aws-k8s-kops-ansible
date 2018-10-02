@@ -1,0 +1,44 @@
+---
+
+- name: Fetch current instance groups config
+  shell: 'kops get instancegroups --name {{ cluster_name }} -o yaml > /tmp/{{ cluster_name }}-ig-conf.yaml'
+  changed_when: false
+
+- name: Configure node spot instances max price
+  replace:
+    path: /tmp/{{ cluster_name }}-ig-conf.yaml
+    regexp: '(  maxPrice: "([0-9.]*)"\n)?  maxSize:'
+    replace: '  maxPrice: "{{ node_max_price }}"\n  maxSize:'
+    after: 'name: nodes'
+  when: node_max_price is defined
+  notify: "Push instance groups config"
+
+- name: Configure master spot instances max price
+  replace:
+    path: /tmp/{{ cluster_name }}-ig-conf.yaml
+    regexp: '(  maxPrice: "([0-9.]*)"\n)?  maxSize:'
+    replace: '  maxPrice: "{{ master_max_price }}"\n  maxSize:'
+    before: 'name: nodes'
+  when: master_max_price is defined
+  notify: "Push instance groups config"
+
+- name: Configure node IAM profile
+  replace:
+    path: /tmp/{{ cluster_name }}-ig-conf.yaml
+    regexp: '^spec:\n(  iam:\n    profile: (.*)\n)?'
+    replace: 'spec:\n  iam:\n    profile: {{ node_profile }}\n'
+    after: 'name: nodes'
+  when: node_profile is defined
+  notify: 'Push instance groups config'
+
+- name: Configure master IAM profile
+  replace:
+    path: /tmp/{{ cluster_name }}-ig-conf.yaml
+    regexp: '^spec:\n(  iam:\n    profile: (.*)\n)?'
+    replace: 'spec:\n  iam:\n    profile: {{ master_profile }}\n'
+    before: 'name: nodes' 
+  when: master_profile is defined
+  notify: 'Push instance groups config'
+
+- name: Run handlers
+  meta: flush_handlers
