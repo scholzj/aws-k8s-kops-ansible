@@ -5,7 +5,16 @@
 
 - hosts: localhost
   connection: local
-  roles:
-    - lambda-delete
-    - lambda-install
-    - create-cluster
+  tasks:
+  - import_role: 
+      name: lambda-delete
+    tags: [use_lambda,never]
+  - import_role: 
+      name: lambda-install
+    tags: [use_lambda,never]
+  - set_fact:
+      lambda_tags: true
+    tags: [use_lambda,never]
+  - import_role: 
+      name: create-cluster
+    tags: always
