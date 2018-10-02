@@ -98,13 +98,26 @@ The main configuration of the cluster is in the variables in `group_vars/all/var
 | `master_size` | EC2 size of the nodes used for the Kubernetes masters (and Etcd hosts) | `m4.large` |
 | `master_count` | Number of EC2 master hosts. | `3` |
 | `master_volume_size` | Size of the master disk volume in GB. | `50` |
+| `master_max_price` | Optional, max price for master spot instances. | `0.05` |
+| `master_profile` | Optional, custom master IAM role. | `arn:aws:iam::1234567890108:instance-profile/kops-custom-master-role` |
 | `node_size` | EC2 size of the nodes used as workers. | `m4.large` |
 | `node_count` | Number of EC2 worker hosts (initial count). | `6` |
 | `node_volume_size` | Size of the node disk volume in GB. | `50` |
+| `node_max_price` | Optional, max price for node spot instances. | `0.05` |
+| `node_profile` | Optional, custom node IAM role. | `arn:aws:iam::1234567890108:instance-profile/kops-custom-node-role` |
 | `node_autoscaler_min` | Minimum number of nodes (for the autoscaler). | `3` |
 | `node_autoscaler_max` | Maximum number of nodes (for the autoscaler). | `6` |
+| `base_image` | Image used for all the instances | `kope.io/k8s-1.11-debian-stretch-amd64-hvm-ebs-2018-08-17` |
+| `kubernetes_version` | Version of kubernetes which should be used. | `1.11` |
+| `iam.allow_container_registry` | Optional, boolean to allow read access to Amazon ECR | `true` |
+| `iam.legacy` | Optional, boolean to use the legacy IAM privileges | `false` |
 
-Additionally to the Kubernetes cluster it self, an AWS Lambda function will be created which will run periodically to tag all resources creating by Kops and by Kubernetes. It will use following tags:
+
+Additionally to the Kubernetes cluster it self, an AWS Lambda function may be created which will run periodically to tag all resources creating by Kops and by Kubernetes. To use it, a tag must be specified :
+```
+ansible-playbook create.yaml --tags "use_lambda"
+``` 
+It will use following tags:
 * Creator
 * Owner
 * Application
