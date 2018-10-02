@@ -4,21 +4,24 @@
 # Create Kubernetes cluster using Kops
 ####################
 
-- set_fact:
+- name: Configure topology variable
+  set_fact:
     topology: "public"
   when: topology != "private"
 
-- set_fact:
+- name: Configure bastion variables
+  set_fact:
     bastion: "false"
     public_ip: "true"
 
-- set_fact:
+- name: Configure bastion variables
+  set_fact:
     bastion: "true"
     public_ip: "false"
   when: topology == "private"
 
 - name: Configure the cluster
-  shell: "kops create cluster --associate-public-ip={{ public_ip }} --bastion={{ bastion }} --cloud=aws --dns-zone={{ dns_zone }} --master-size={{ master_size }} --master-zones={{ master_zones|default(aws_zones) }} --master-count={{ master_count }} --master-volume-size={{ master_volume_size }} --network-cidr={{ network_cidr }} --networking={{ kubernetes_networking }} --node-count={{ node_count }} --node-size={{ node_size }} --node-volume-size={{ node_volume_size }} --target=direct --topology={{ topology }} --zones={{ aws_zones }} --ssh-public-key={{ ssh_public_key }} --name={{ cluster_name }} --state {{ state_store }} --cloud-labels=\"Application={{ tag_application }},Confidentiality={{ tag_confidentiality }},CostCenter={{ tag_costcenter }},Product={{ tag_product }},Owner={{ tag_owner }},Creator={{ tag_creator }},Environment={{ tag_environment }}\" --authorization=rbac --encrypt-etcd-storage"
+  shell: "kops create cluster --associate-public-ip={{ public_ip }} --bastion={{ bastion }} --cloud=aws --dns-zone={{ dns_zone }} --image {{ base_image }} --master-size={{ master_size }} --master-zones={{ master_zones|default(aws_zones) }} --master-count={{ master_count }} --master-volume-size={{ master_volume_size }} --network-cidr={{ network_cidr }} --networking={{ kubernetes_networking }} --node-count={{ node_count }} --node-size={{ node_size }} --node-volume-size={{ node_volume_size }} --target=direct --topology={{ topology }} --zones={{ aws_zones }} --ssh-public-key={{ ssh_public_key }} --name={{ cluster_name }} --state {{ state_store }} --authorization=rbac --encrypt-etcd-storage --kubernetes-version {{ kubernetes_version }} --cloud-labels=\"Application={{ tag_application }},Confidentiality={{ tag_confidentiality }},CostCenter={{ tag_costcenter }},Product={{ tag_product }},Owner={{ tag_owner }},Creator={{ tag_creator }},Environment={{ tag_environment }}\""
 
 - name: Create the physical cluster
   shell: "kops update cluster {{ cluster_name }} --yes --state {{ state_store }}"
