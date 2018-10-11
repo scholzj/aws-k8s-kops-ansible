@@ -60,7 +60,7 @@ tag_environment: Development
 
 
 ## Cluster spec
-kubernetes_version: 1.11
+kubernetes_version: 1.11.3
 
 
 # IAM
