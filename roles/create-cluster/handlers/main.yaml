@@ -1,0 +1,7 @@
+---
+
+- name: Push instance groups config
+  shell: 'kops replace --name {{ cluster_name }} -f /tmp/{{ cluster_name }}-ig-conf.yaml'
+
+- name: Push cluster config
+  shell: 'kops replace --name {{ cluster_name }} -f /tmp/{{ cluster_name }}-cluster-conf.yaml'

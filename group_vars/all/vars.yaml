@@ -1,11 +1,12 @@
 ---
-cluster_name: kubernetes.j9z.cz
-state_store: s3://kops-state-store-j9z-cz
+cluster_name: kubernetes.example.com
+state_store: s3://kops-state-store-example
 
-# Remote access
+## Remote access
 ssh_public_key: ~/.ssh/id_rsa.pub
 
-# Regions / Availability zones
+
+## Regions / Availability zones
 aws_region: us-east-1
 aws_zones: us-east-1a,us-east-1b,us-east-1c
 # Use master_zones if you want your masters in different zones than worker nodes.
@@ -13,23 +14,42 @@ aws_zones: us-east-1a,us-east-1b,us-east-1c
 # When not defined, aws_zones will be sued instead
 master_zones: us-east-1a
 
-# Network
-dns_zone: j9z.cz
+
+## Network
+dns_zone: example.com
 network_cidr: 172.16.0.0/16
-kubernetes_networking: calico
+kubernetes_networking: kubenet
+# Topology must be either public or private
 topology: public
 
-# EC2 host sizing
+
+## EC2 host sizing
+base_image: kope.io/k8s-1.11-debian-stretch-amd64-hvm-ebs-2018-08-17
+
+# Master configuration
 master_size: t2.medium
 master_count: 1
 master_volume_size: 50
+# Use master_max_price if you want to use spot instances.
+# Useful to reduce cost during testing
+#master_max_price: 0.05
+# Use master_profile if you want custom iam policies
+#master_profile: arn:aws:iam::1234567890108:instance-profile/kops-custom-master-role
+
+# Node configuration
 node_size: t2.medium
 node_count: 1
 node_volume_size: 50
+# Use node_max_price if you want to use spot instances.
+# Useful to reduce cost during testing
+#node_max_price: 0.05
 node_autoscaler_min: 1
 node_autoscaler_max: 6
+# Use node_profile if you want custom iam policies
+#node_profile: arn:aws:iam::1234567890108:instance-profile/kops-custom-node-role
 
-# Tags
+
+## Tags
 tag_creator: MyName
 tag_owner: MyName
 tag_application: MyApp
@@ -37,3 +57,13 @@ tag_costcenter: 1234
 tag_product: MyProduct
 tag_confidentiality: StrictlyConfidential
 tag_environment: Development
+
+
+## Cluster spec
+kubernetes_version: 1.11.3
+
+
+# IAM
+iam:
+  allow_container_registry: true
+  legacy: false
